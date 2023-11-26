@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <h1>Welcome back!</h1>
+    <form action="/login" method="post">
+        <div class="mb-3">
+            <input autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" autocomplete="off" id="password" name="password" placeholder="Password" type="password">
+        </div>
+        {% for message in error_messages %}
+        <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+        <button href="inout.html" class="btn btn-primary" type="submit">Log In</button>
+    </form>
+{% endblock %}

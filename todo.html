@@ -1,0 +1,14 @@
+create sqlite3 table for history 
+(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, symbol TEXT NOT NULL, shares INTEGER NOT NULL, price NUMERIC NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, type TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id));
+
+page with two buttons (indoor vs outdoor)
+each button leads to a separate webpage with separate information
+
+    each page will then present a generate button 
+
+    once clicked, the user will be presented with a randomized selection in a linear fashion
+    the user can re-generate from this page 
+
+personalize page
+users can edit the options used to generate, can even add their own category
+
