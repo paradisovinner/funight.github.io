@@ -37,13 +37,11 @@ function updateGenerator(options) {
     dessertOptions = options.desserts;
     activityOptions = options.activities;
     endingOptions = options.endofnight;
-
-    // Rest of the update logic...
 }
 
 // Function to fetch personalized options from the server
 function fetchPersonalizedOptions() {
-    // Fetch options from the server using an AJAX request
+    // Fetch options from the server
     fetch('/getOptions')
         .then(response => response.json())
         .then(options => {

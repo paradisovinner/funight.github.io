@@ -29,7 +29,7 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    return render_template("about.html")
+    return render_template("index.html")
 
 
 @app.route("/history")
@@ -152,7 +152,9 @@ def get_options():
         desserts = request.form.get("desserts");
         activities = request.form.get("activities");
         endofnight = request.form.get("endofnight");
-    error_messages.append("Please enter valid entries")
+    
+        if not (meals or desserts or activities or endofnight):
+            error_messages.append("Please enter at least one entry")
 
     options = db.execute("SELECT meals, desserts, activities, endofnight FROM history WHERE id = :user_id", user_id=session["user_id"])[0]["meals", "desserts", "activities", "endofnight"]
     
@@ -189,13 +191,8 @@ def personalize():
 
 @app.route("/inout", methods=["GET", "POST"])
 @login_required
-def add():
+def inout():
     return render_template('inout.html')
-
-
-@app.route("/about")
-def about():
-    return render_template('about.html')
 
 
 if __name__ == "__main__":

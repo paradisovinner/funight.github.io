@@ -9,23 +9,21 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Type</th>
-                <th>Symbol</th>
-                <th>Shares</th>
-                <th>Price</th>
-                <th>Total</th>
+                <th>Meals</th>
+                <th>Desserts</th>
+                <th>Activities</th>
+                <th>Ways to End the Night</th>
                 <th>Timestamp</th>
             </tr>
         </thead>
         <tbody>
-            {% for transaction in transactions %}
+            {% for all in history %}
             <tr>
-                <td>{{ transaction.type }}</td>
-                <td>{{ transaction.symbol }}</td>
-                <td>{{ transaction.shares }}</td>
-                <td>{{ transaction.price| usd}}</td>
-                <td>{{ (transaction.shares * transaction.price)| usd }}</td>
-                <td>{{ transaction.timestamp }}</td>
+                <td>{{ history.meals }}</td>
+                <td>{{ history.desserts }}</td>
+                <td>{{ history.activities }}</td>
+                <td>{{ history.endofnight }}</td>
+                <td>{{ history.timestamp }}</td>
             </tr>
             {% endfor %}
         </tbody>
