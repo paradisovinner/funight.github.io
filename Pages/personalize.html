@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Personalize
+{% endblock %}
+
+{% block main %}
+    <form action="/personalize" method="post" onsubmit="onFormSubmit(); return false;">   
+    <h1>Personalize your Funight!</h1>
+    <table>
+        <tr>
+            <td>
+                <form autocomplete="off" onsubmit="onFormSubmit()">
+                    <div>
+                        <label for="meals">Meals</label>
+                        <input type="text" name="meals" id="meals">
+                    </div>
+                    <div>
+                        <label for="desserts">Desserts</label>
+                        <input type="text" name="desserts" id="desserts">
+                    </div>
+                    <div>
+                        <label for="activities">Activities</label>
+                        <input type="text" name="activities" id="activities">
+                    </div>
+                    <div>
+                        <label for="endofnight">Ways to End the Night</label>
+                        <input type="text" name="endofnight" id="endofnight">
+                    </div>
+
+                    <div class="form_action--button">
+                        <input type="submit" value="Submit">
+                        <input type="reset" value="Reset">
+                    </div>
+                </form>
+
+                <td>
+                    <table class="list" id="storeList">
+                        <thead>
+                            <tr>
+                                <th>Meals</th>
+                                <th>Desserts</th>
+                                <th>Activities</th>
+                                <th>Ways to End the Night</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </td>
+            </td>
+        </tr>
+    </table>
+    </form>
+    <script src="personalize.js"></script>
+{% endblock %}
