@@ -29,7 +29,7 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    return render_template("about.html")
+    return render_template("index.html")
 
 
 @app.route("/history")
@@ -191,11 +191,6 @@ def personalize():
 @login_required
 def add():
     return render_template('inout.html')
-
-
-@app.route("/about")
-def about():
-    return render_template('about.html')
 
 
 if __name__ == "__main__":
