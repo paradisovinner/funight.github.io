@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block main %}
+<script src="personalize.js"></script>
+
+<!-- Call fetchPersonalizedOptions() on page load -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchPersonalizedOptions();
+    });
+</script>
     <h2>What are we feeling today?</h2>
     <div id="meal" class="category">Meal: <span id="meal-result"></span></div>
     <div id="dessert" class="category">Dessert: <span id="dessert-result"></span></div>
@@ -15,6 +23,8 @@
     <div id="loading">Generating result...</div>
 
     <button id="regenerate-btn" onclick="generateResult()">Re-generate</button>
+    <br />
+    <a href="/personalize">Personalize Your Options</a>
 
     <script src="generateout.js"></script>
 {% endblock %}

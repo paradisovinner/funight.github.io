@@ -1,9 +1,9 @@
 import sqlite3
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from features import apology, login_required, lookup, usd
+from features import login_required
 
 # Configure application
 app = Flask(__name__)
@@ -28,54 +28,21 @@ def after_request(response):
 
 
 @app.route("/")
-@login_required
 def index():
-    """Show portfolio of stocks"""
-    stocks = db.execute(
-        "SELECT symbol, SUM(shares) as total_shares FROM transactions WHERE user_id = :user_id GROUP BY symbol HAVING total_shares > 0",
-        user_id=session["user_id"],
-    )
-
-    cash = db.execute(
-        "SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"]
-    )[0]["cash"]
-
-    total_value = cash
-    grand_total = cash
-
-    for stock in stocks:
-        quoted = lookup(stock["symbol"])
-        stock["name"] = quoted["name"]
-        stock["price"] = quoted["price"]
-        stock["value"] = stock["price"] * stock["total_shares"]
-        total_value += stock["value"]
-        grand_total += stock["value"]
-
-    total_value = usd(total_value)
-    grand_total = usd(grand_total)
-    cash = usd(cash)
-
-    return render_template(
-        "index.html",
-        stocks=stocks,
-        cash=cash,
-        total_value=total_value,
-        grand_total=grand_total,
-    )
-
+    return render_template("about.html")
 
 
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions"""
+    """Show history of funight"""
 
-    transactions = db.execute(
-        "SELECT * FROM transactions WHERE user_id = :user_id ORDER BY timestamp DESC",
+    history = db.execute(
+        "SELECT * FROM history WHERE user_id = :user_id ORDER BY timestamp DESC",
         user_id=session["user_id"],
     )
 
-    return render_template("history.html", transactions=transactions)
+    return render_template("history.html", history=history)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -172,32 +139,64 @@ def register():
     else:
         return render_template("register.html")
 
+    return render_template("add.html")
 
-@app.route("/add", methods=["GET", "POST"])
+
+@app.route('/getOptions')
+@login_required
+def get_options():
+    # Fetch options from the database
+    
+    if request.method == "POST":
+        meals = request.form.get("meals");
+        desserts = request.form.get("desserts");
+        activities = request.form.get("activities");
+        endofnight = request.form.get("endofnight");
+    error_messages.append("Please enter valid entries")
+
+    options = db.execute("SELECT meals, desserts, activities, endofnight FROM history WHERE id = :user_id", user_id=session["user_id"])[0]["meals", "desserts", "activities", "endofnight"]
+    
+    db.execute("INSERT INTO history (user_id, meals, desserts, activities, endofnight) VALUES (:user_id, :meals, :desserts, :activities, :endofnight)",
+               user_id=session["user_id"], meals=meals, desserts=desserts, activities=activities, endofnight=endofnight)
+
+    flash("Your touch of funight has been added!")
+
+    return jsonify(options)
+
+
+@app.route("/personalize", methods=["GET", "POST"])
+@login_required
+def personalize():
+    if request.method == "POST":
+        meals = request.form.get("meals");
+        desserts = request.form.get("desserts");
+        activities = request.form.get("activities");
+        endofnight = request.form.get("endofnight");
+    
+        if not meals or not desserts or not activities or not endofnight:
+            error_messages.append("Please provide us with your ideal funight")
+    
+        options = db.execute("SELECT meals, desserts, activities, endofnight FROM history WHERE id = :user_id", user_id=session["user_id"])[0]["meals", "desserts", "activities", "endofnight"]
+    
+        db.execute("INSERT INTO history (user_id, meals, desserts, activities, endofnight) VALUES (:user_id, :meals, :desserts, :activities, :endofnight)",
+               user_id=session["user_id"], meals=meals, desserts=desserts, activities=activities, endofnight=endofnight)
+
+        flash("Your touch of funight has been added!")
+
+        return jsonify(options)
+    return render_template('personalize.html')
+
+
+@app.route("/inout", methods=["GET", "POST"])
 @login_required
 def add():
-    if request.method == "POST":
-        new_cash = int(request.form.get("new_cash"))
+    return render_template('inout.html')
 
-        if not new_cash or not str(new_cash).isdigit() or new_cash <= 0:
-            return apology("Must Give Money")
 
-        user_id = session["user_id"]
+@app.route("/about")
+def about():
+    return render_template('about.html')
 
-        rows = db.execute(
-            "SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"]
-        )
-
-        user_cash = rows[0]["cash"]
-
-        update_cash = user_cash + new_cash
-
-        db.execute("UPDATE users SET cash = ? WHERE id = ?", update_cash, user_id)
-
-        flash(f"You added {usd(new_cash)}!")
-        return redirect("/")
-    else:
-        return render_template("add.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

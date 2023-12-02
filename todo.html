@@ -1,5 +1,10 @@
 create sqlite3 table for history 
-(id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, symbol TEXT NOT NULL, shares INTEGER NOT NULL, price NUMERIC NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, type TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id));
+CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, hash TEXT NOT NULL);
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE UNIQUE INDEX username ON users (username);
+CREATE TABLE history (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, meals TEXT NOT NULL, desserts TEXT NOT NULL, activities TEXT NOT NULL, endofnight TEXT NOT NULL, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id));
+CREATE TABLE options (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, category TEXT NOT NULL, value TEXT NOT NULL);
+
 
 page with two buttons (indoor vs outdoor)
 each button leads to a separate webpage with separate information
