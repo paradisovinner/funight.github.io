@@ -11,7 +11,7 @@
 
         <link href="/design/styles.css" rel="stylesheet">
 
-        <title>Funight:</title>
+        <title>Funight: {% block title %}{% endblock %}</title>
     </head>
 
     <body>
@@ -22,19 +22,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbar">
+                    {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="Pages/about">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Pages/history">History</a></li>
-                            <li class="nav-item"><a class="nav-link" href="Pages/personalize">Personalize</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/generate">Generate</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/personalize">Personalize</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
+                    {% else %}
+                        <ul class="navbar-nav ms-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </nav>
-
-        <div id="flashMessages" class="alert alert-primary mb-0 text-center" role="alert" style="display: none;"></div>
 
         <video autoplay muted loop>
             <source src="/workspaces/funight/multicolored-clouds.1920x1080.mp4" type="video/mp4">
@@ -46,23 +52,18 @@
             {% block main %}{% endblock %}
         </main>
 
-        <script src="path/to/bootstrap.bundle.min.js"></script>
-        <script>
-            // Function to display flashed messages
-            function displayFlashMessages() {
-                var flashMessagesContainer = document.getElementById('flashMessages');
-                var flashedMessages = [];
+        {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary mb-0 text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
 
-                if (flashedMessages.length > 0) {
-                    flashMessagesContainer.innerHTML = flashedMessages.join(' ');
-                    flashMessagesContainer.style.display = 'block';
-                }
-            }
-
-            // Call the function when the page is loaded
-            window.onload = displayFlashMessages;
-        </script>
-
+        <main class="container-fluid py-5 text-center">
+            {% block main %}{% endblock %}
+        </main>
+        
         <footer class="mb-5 small text-center text-muted">
             Live Wallpaper by <a href="https://motionbgs.com/multicolored-clouds">motionbgs</a>
         </footer>
