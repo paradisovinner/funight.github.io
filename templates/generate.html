@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Outdoor Fun
+    Indoor Fun
 {% endblock %}
 
 {% block main %}
-<script src="design/personalize.js"></script>
+<script src="static/personalize.js"></script>
 
 <!-- Call fetchPersonalizedOptions() on page load -->
 <script>
@@ -24,7 +24,7 @@
 
     <button id="regenerate-btn" onclick="generateResult()">Re-generate</button>
     <br />
-    <a href="Pages/personalize">Personalize Your Options</a>
-
-    <script src="design/generateout.js"></script>
+    <a href="/personalize">Personalize Your Options</a>
+    
+    <script src="static/generatein.js"></script>
 {% endblock %}
